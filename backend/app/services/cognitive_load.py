@@ -1,3 +1,19 @@
+# In-memory store for session events
+# Format: {session_id: [event, event, ...]}
+session_events = {}
+
+
+def add_event_to_session(event):
+    """Add event to session memory and return all events for that session"""
+    session_id = event.session_id
+
+    if session_id not in session_events:
+        session_events[session_id] = []
+
+    session_events[session_id].append(event)
+    return session_events[session_id]
+
+
 def calculate_cognitive_load(events):
     score = 0
 
@@ -24,5 +40,6 @@ def calculate_cognitive_load(events):
 
     return {
         "score": score,
-        "level": level
+        "level": level,
+        "total_events": len(events)
     }
