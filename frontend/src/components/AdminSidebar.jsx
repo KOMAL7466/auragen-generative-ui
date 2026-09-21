@@ -10,9 +10,13 @@ function AdminSidebar() {
 
       <nav className="admin-nav">
         <NavLink to="/admin/dashboard">Dashboard</NavLink>
-        <NavLink to="/admin/properties">Properties</NavLink>
         <NavLink to="/admin/users">Users</NavLink>
+        <NavLink to="/admin/properties">Properties</NavLink>
+        <NavLink to="/admin/enquiries">Enquiries</NavLink>
+        <NavLink to="/admin/analytics">Analytics</NavLink>
         <NavLink to="/admin/cognitive-load">Cognitive Load</NavLink>
+        <NavLink to="/admin/ai-analytics">AI Analytics</NavLink>
+        <NavLink to="/admin/settings">Settings</NavLink>
       </nav>
     </aside>
   );

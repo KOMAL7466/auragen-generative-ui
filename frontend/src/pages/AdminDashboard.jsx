@@ -1,10 +1,10 @@
 function AdminDashboard() {
   const stats = [
-    { title: "Total Users", value: "2,481", change: "+12.5%" },
-    { title: "Active Users", value: "1,204", change: "+8.2%" },
-    { title: "Properties", value: "128", change: "+5.4%" },
-    { title: "Total Views", value: "84.2k", change: "+16.8%" },
-  ];
+  { title: "Total Users", value: "2,481" },
+  { title: "Properties", value: "128" },
+  { title: "Enquiries", value: "342" },
+  { title: "Active Users", value: "1,204" },
+];
 
   const trafficData = [
     { day: "Mon", value: 55 },

@@ -1,40 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function AdminProperties() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-  const [properties, setProperties] = useState([
-    {
-      id: "P001",
-      name: "Green Valley Apartments",
-      type: "Apartment",
-      price: "₹65 Lakhs",
-      status: "Available",
-    },
-    {
-      id: "P002",
-      name: "Sunrise Residency",
-      type: "Villa",
-      price: "₹1.2 Cr",
-      status: "Available",
-    },
-    {
-      id: "P003",
-      name: "Lake View Heights",
-      type: "Apartment",
-      price: "₹82 Lakhs",
-      status: "Sold",
-    },
-    {
-      id: "P004",
-      name: "Urban Nest",
-      type: "Plot",
-      price: "₹45 Lakhs",
-      status: "Available",
-    },
-  ]);
+ const [properties, setProperties] = useState(() => {
+  const savedProperties = localStorage.getItem("auragen_properties");
 
+  return savedProperties
+    ? JSON.parse(savedProperties)
+    : [
+        {
+          id: "P001",
+          name: "Green Valley Apartments",
+          type: "Apartment",
+          price: "₹65 Lakhs",
+          status: "Available",
+        },
+        {
+          id: "P002",
+          name: "Sunrise Residency",
+          type: "Villa",
+          price: "₹1.2 Cr",
+          status: "Available",
+        },
+        {
+          id: "P003",
+          name: "Lake View Heights",
+          type: "Apartment",
+          price: "₹82 Lakhs",
+          status: "Sold",
+        },
+        {
+          id: "P004",
+          name: "Urban Nest",
+          type: "Plot",
+          price: "₹45 Lakhs",
+          status: "Available",
+        },
+      ];
+});
+useEffect(() => {
+  localStorage.setItem(
+    "auragen_properties",
+    JSON.stringify(properties)
+  );
+}, [properties]);
   const [formData, setFormData] = useState({
     name: "",
     type: "Apartment",
