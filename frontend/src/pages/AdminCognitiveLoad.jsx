@@ -80,12 +80,12 @@ function AdminCognitiveLoad() {
 
         <div className="admin-stat-card">
           <span>Medium Load</span>
-          <strong>38</strong>
+          <strong>21</strong>
         </div>
 
         <div className="admin-stat-card">
           <span>High Load</span>
-          <strong>18</strong>
+          <strong>7</strong>
         </div>
       </div>
 
@@ -103,7 +103,7 @@ function AdminCognitiveLoad() {
           <div className="load-item">
             <div className="load-label">
               <span>Low Load</span>
-              <strong>56%</strong>
+              <strong>72%</strong>
             </div>
 
             <div className="load-bar">
@@ -114,7 +114,7 @@ function AdminCognitiveLoad() {
           <div className="load-item">
             <div className="load-label">
               <span>Medium Load</span>
-              <strong>30%</strong>
+              <strong>21%</strong>
             </div>
 
             <div className="load-bar">
@@ -125,7 +125,7 @@ function AdminCognitiveLoad() {
           <div className="load-item">
             <div className="load-label">
               <span>High Load</span>
-              <strong>14%</strong>
+              <strong>7%</strong>
             </div>
 
             <div className="load-bar">
@@ -135,6 +135,40 @@ function AdminCognitiveLoad() {
         </div>
       </section>
 
+      <section className="admin-panel">
+        <div className="admin-panel-header">
+          <div>
+            <h2>Cognitive Load Hotspots</h2>
+            <p>Areas where users experience the most interaction difficulty</p>
+          </div>
+        </div>
+
+        <div className="admin-table-wrapper">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Hotspot</th>
+                <th>Events</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Investment</td>
+                <td>128</td>
+              </tr>
+              <tr>
+                <td>Compare tool</td>
+                <td>94</td>
+              </tr>
+              <tr>
+                <td>Enquiry form</td>
+                <td>71</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
       <section className="admin-panel">
         <div className="admin-panel-header">
           <div>

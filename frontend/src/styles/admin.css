@@ -1098,23 +1098,19 @@
 }
 
 .low-load {
-  width: 56%;
-
+  width: 72%;
   background: #2e9b5d;
 }
 
 .medium-load {
-  width: 30%;
-
+  width: 21%;
   background: #d99a24;
 }
 
 .high-load {
-  width: 14%;
-
+  width: 7%;
   background: #d85a4f;
 }
-
 
 /* =========================================================
    RESPONSIVE
