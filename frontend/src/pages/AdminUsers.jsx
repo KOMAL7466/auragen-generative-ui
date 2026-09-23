@@ -2,37 +2,14 @@ import { useState } from "react";
 
 function AdminUsers() {
   const [users, setUsers] = useState([
-    {
-      id: "U001",
-      name: "Rahul Sharma",
-      email: "rahul@example.com",
-      role: "User",
-      status: "Active",
-    },
-    {
-      id: "U002",
-      name: "Ananya Reddy",
-      email: "ananya@example.com",
-      role: "User",
-      status: "Active",
-    },
-    {
-      id: "U003",
-      name: "Arjun Kumar",
-      email: "arjun@example.com",
-      role: "User",
-      status: "Inactive",
-    },
-    {
-      id: "U004",
-      name: "Sneha Rao",
-      email: "sneha@example.com",
-      role: "User",
-      status: "Active",
-    },
+    { id: "U001", name: "Rahul Sharma", email: "rahul@example.com", role: "User", status: "Active" },
+    { id: "U002", name: "Ananya Reddy", email: "ananya@example.com", role: "User", status: "Active" },
+    { id: "U003", name: "Arjun Kumar", email: "arjun@example.com", role: "User", status: "Inactive" },
+    { id: "U004", name: "Sneha Rao", email: "sneha@example.com", role: "User", status: "Active" },
   ]);
 
   const [editingId, setEditingId] = useState(null);
+  const [viewUser, setViewUser] = useState(null); // ✅ NOW INSIDE COMPONENT
 
   const [formData, setFormData] = useState({
     name: "",
@@ -134,11 +111,7 @@ function AdminUsers() {
 
               <div className="admin-form-group">
                 <label>Role</label>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                >
+                <select name="role" value={formData.role} onChange={handleChange}>
                   <option>User</option>
                   <option>Admin</option>
                 </select>
@@ -146,21 +119,14 @@ function AdminUsers() {
 
               <div className="admin-form-group">
                 <label>Status</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                >
+                <select name="status" value={formData.status} onChange={handleChange}>
                   <option>Active</option>
                   <option>Inactive</option>
                 </select>
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="admin-add-button"
-            >
+            <button type="submit" className="admin-add-button">
               Update User
             </button>
           </form>
@@ -192,19 +158,13 @@ function AdminUsers() {
               {users.map((user) => (
                 <tr key={user.id}>
                   <td>{user.id}</td>
-
                   <td>{user.name}</td>
-
                   <td>{user.email}</td>
-
                   <td>{user.role}</td>
-
                   <td>
                     <span
                       className={`property-status ${
-                        user.status === "Active"
-                          ? "available"
-                          : "sold"
+                        user.status === "Active" ? "available" : "sold"
                       }`}
                     >
                       {user.status}
@@ -213,15 +173,8 @@ function AdminUsers() {
 
                   <td>
                     <div className="property-actions">
-
-                      {/* View */}
-                      <button
-                        onClick={() => {
-                          alert(
-                            `Name: ${user.name}\nEmail: ${user.email}\nRole: ${user.role}\nStatus: ${user.status}`
-                          );
-                        }}
-                      >
+                      {/* View — MODAL */}
+                      <button onClick={() => setViewUser(user)}>
                         View
                       </button>
 
@@ -229,7 +182,6 @@ function AdminUsers() {
                       <button
                         onClick={() => {
                           setEditingId(user.id);
-
                           setFormData({
                             name: user.name,
                             email: user.email,
@@ -240,17 +192,16 @@ function AdminUsers() {
                       >
                         Edit
                       </button>
-{/* Delete */}
-<button
-  className="delete-action"
-  onClick={() => {
-    setUsers(
-      users.filter((item) => item.id !== user.id)
-    );
-  }}
->
-  Delete
-</button>
+
+                      {/* Delete */}
+                      <button
+                        className="delete-action"
+                        onClick={() => {
+                          setUsers(users.filter((item) => item.id !== user.id));
+                        }}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -259,6 +210,25 @@ function AdminUsers() {
           </table>
         </div>
       </section>
+
+      {/* View User Modal */}
+      {viewUser && (
+        <div className="admin-modal-overlay" onClick={() => setViewUser(null)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h2>User Details</h2>
+              <button onClick={() => setViewUser(null)}>×</button>
+            </div>
+            <div className="admin-modal-body">
+              <p><strong>ID:</strong> {viewUser.id}</p>
+              <p><strong>Name:</strong> {viewUser.name}</p>
+              <p><strong>Email:</strong> {viewUser.email}</p>
+              <p><strong>Role:</strong> {viewUser.role}</p>
+              <p><strong>Status:</strong> {viewUser.status}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
