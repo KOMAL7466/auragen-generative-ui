@@ -17,6 +17,8 @@ import Register from "./pages/Register";
 import UserDashboard from "./pages/UserDashboard";
 import PropertyList from "./pages/PropertyList";
 import PropertyDetail from "./pages/PropertyDetail";
+import AIChat from "./pages/AIChat";
+
 
 function AdminLayout({ children }) {
   return (
@@ -40,6 +42,7 @@ function App() {
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/properties" element={<PropertyList />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
+        <Route path="/ai-chat" element={<AIChat />} />
 
         {/* Admin */}
         <Route path="/admin/login" element={<AdminLogin />} />
