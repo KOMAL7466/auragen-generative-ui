@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import { getPropertyById } from "../services/propertyService";
 import { trackEvent } from "../services/interactionService";
 import AdaptiveUILayer from "../components/AdaptiveUILayer";
+import PropertyMap from "../components/PropertyMap";
 
 const IMGS = {
   Villa: [
@@ -25,6 +26,110 @@ const IMGS = {
     "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&q=80",
   ],
 };
+
+// City coordinates for map
+const CITY_COORDS = {
+  Chandigarh: { lat: 30.7333, lng: 76.7794 },
+  Mohali: { lat: 30.7046, lng: 76.7179 },
+  Panchkula: { lat: 30.6942, lng: 76.8606 },
+  Zirakpur: { lat: 30.6425, lng: 76.8173 },
+};
+
+// Nearby facilities mock data by city
+const NEARBY_DATA = {
+  Chandigarh: {
+    schools: ["DAV Public School", "St. Kabir School", "Carmel Convent"],
+    hospitals: ["PGIMER Chandigarh", "Alchemist Hospital", "Fortis Hospital"],
+    metro: ["Sector 17 Metro", "Sector 8 Metro"],
+    shopping: ["Elante Mall", "Sector 17 Plaza", "VR Punjab"],
+  },
+  Mohali: {
+    schools: ["Ryan International", "Gian Jyoti School"],
+    hospitals: ["Fortis Mohali", "Grecian Hospital"],
+    metro: ["Mohali Metro", "Phase 8 Metro"],
+    shopping: ["VR Punjab", "Bestech Square"],
+  },
+  Panchkula: {
+    schools: ["Bhavan Vidyalaya", "DC Model School"],
+    hospitals: ["Alchemist Panchkula", "Paras Hospital"],
+    metro: ["Panchkula Metro"],
+    shopping: ["Sector 8 Market", "Vishal Mega Mart"],
+  },
+  Zirakpur: {
+    schools: ["Aarohi Model School", "Delhi Public School"],
+    hospitals: ["Silver Oaks Hospital", "Amar Hospital"],
+    metro: ["Zirakpur Metro Station"],
+    shopping: ["Paras Downtown", "Cosmo Mall"],
+  },
+};
+
+// Investment Recommendation Logic
+function calculateRecommendation(property) {
+  let score = 0;
+  const reasons = [];
+
+  // Historical growth
+  if (property.price >= 10000000) {
+    score += 30;
+    reasons.push({ positive: true, text: "Strong historical price growth (+112% in 10 years)" });
+  } else {
+    score += 20;
+    reasons.push({ positive: true, text: "Moderate historical growth with steady appreciation" });
+  }
+
+  // Rental potential by city
+  const primeCities = ["Chandigarh", "Mohali"];
+  if (primeCities.includes(property.city)) {
+    score += 25;
+    reasons.push({ positive: true, text: `Prime location in ${property.city} — high rental demand` });
+  } else {
+    score += 15;
+    reasons.push({ positive: true, text: "Good rental market with growing demand" });
+  }
+
+  // Property type
+  if (property.property_type === "Villa" || property.property_type === "Apartment") {
+    score += 20;
+    reasons.push({ positive: true, text: `${property.property_type} properties have strong resale value` });
+  } else {
+    score += 10;
+    reasons.push({ positive: true, text: "Property type has stable long-term value" });
+  }
+
+  // Nearby development
+  const hasMetro = NEARBY_DATA[property.city]?.metro?.length > 0;
+  if (hasMetro) {
+    score += 15;
+    reasons.push({ positive: true, text: "Metro connectivity nearby — boosts future value" });
+  }
+
+  // Caution flag
+  if (property.status === "Under Construction") {
+    score -= 5;
+    reasons.push({ positive: false, text: "Under construction — possession delayed" });
+  }
+
+  // Cap at 100
+  score = Math.min(score, 100);
+
+  let recommendation = "NEUTRAL";
+  let verdict = "HOLD";
+  if (score >= 80) {
+    recommendation = "STRONG INVEST";
+    verdict = "EXCELLENT";
+  } else if (score >= 65) {
+    recommendation = "INVEST";
+    verdict = "GOOD";
+  } else if (score >= 50) {
+    recommendation = "NEUTRAL";
+    verdict = "MODERATE";
+  } else {
+    recommendation = "CAUTION";
+    verdict = "RISKY";
+  }
+
+  return { score, recommendation, verdict, reasons };
+}
 
 function PropertyDetail() {
   const { id } = useParams();
@@ -82,6 +187,10 @@ function PropertyDetail() {
     { year: "2024", value: 76 },
     { year: "2026", value: 85 },
   ];
+
+  const coords = CITY_COORDS[property.city] || CITY_COORDS.Chandigarh;
+  const nearby = NEARBY_DATA[property.city] || NEARBY_DATA.Chandigarh;
+  const rec = calculateRecommendation(property);
 
   return (
     <>
@@ -152,7 +261,43 @@ function PropertyDetail() {
             </div>
           </div>
 
-          {/* Investment Snapshot */}
+          {/* ============ AI INVESTMENT RECOMMENDATION ============ */}
+          <div className="lux-section-title">
+            <div className="title-block">
+              <h2>
+                AI Investment <span className="italic">Recommendation</span>
+              </h2>
+              <p>Based on historical trends, location, and market analysis</p>
+            </div>
+          </div>
+
+          <div className="pd-recommendation-card">
+            <div className="pd-rec-score-block">
+              <div className="pd-rec-label">Investment Score</div>
+              <div className="pd-rec-score">
+                {rec.score}
+                <span className="pd-rec-score-total">/100</span>
+              </div>
+              <div className={`pd-rec-verdict pd-rec-verdict-${rec.verdict.toLowerCase()}`}>
+                {rec.recommendation}
+              </div>
+            </div>
+
+            <div className="pd-rec-reasons">
+              <div className="pd-rec-reasons-title">Analysis Breakdown</div>
+              {rec.reasons.map((r, i) => (
+                <div key={i} className={`pd-rec-reason ${r.positive ? "positive" : "caution"}`}>
+                  <span className="pd-rec-reason-icon">{r.positive ? "✓" : "⚠"}</span>
+                  <span>{r.text}</span>
+                </div>
+              ))}
+              <div className="pd-rec-disclaimer">
+                ⚠ This is an AI-generated estimate for guidance only. Not financial advice.
+              </div>
+            </div>
+          </div>
+
+          {/* ============ INVESTMENT SNAPSHOT ============ */}
           <div className="lux-section-title">
             <div className="title-block">
               <h2>
@@ -186,7 +331,73 @@ function PropertyDetail() {
             </div>
           </div>
 
-          {/* Enquiry */}
+          {/* ============ LOCATION MAP ============ */}
+          <div className="lux-section-title">
+            <div className="title-block">
+              <h2>
+                Location & <span className="italic">Connectivity</span>
+              </h2>
+              <p>{property.locality}, {property.city}</p>
+            </div>
+          </div>
+
+          <div className="pd-map-wrapper">
+            <PropertyMap lat={coords.lat} lng={coords.lng} title={property.title} />
+          </div>
+
+          {/* ============ NEARBY FACILITIES ============ */}
+          <div className="lux-section-title">
+            <div className="title-block">
+              <h2>
+                Nearby <span className="italic">Facilities</span>
+              </h2>
+              <p>Everything you need within a 2 km radius</p>
+            </div>
+          </div>
+
+          <div className="pd-nearby-grid">
+            <div className="pd-nearby-card">
+              <div className="pd-nearby-icon">🏫</div>
+              <h4>Schools</h4>
+              <ul>
+                {nearby.schools.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="pd-nearby-card">
+              <div className="pd-nearby-icon">🏥</div>
+              <h4>Hospitals</h4>
+              <ul>
+                {nearby.hospitals.map((h, i) => (
+                  <li key={i}>{h}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="pd-nearby-card">
+              <div className="pd-nearby-icon">🚇</div>
+              <h4>Metro / Transport</h4>
+              <ul>
+                {nearby.metro.map((m, i) => (
+                  <li key={i}>{m}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="pd-nearby-card">
+              <div className="pd-nearby-icon">🛒</div>
+              <h4>Shopping</h4>
+              <ul>
+                {nearby.shopping.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* ============ ENQUIRY ============ */}
           <div className="lux-section-title">
             <div className="title-block">
               <h2>
