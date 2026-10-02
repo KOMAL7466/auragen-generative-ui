@@ -6,6 +6,7 @@ from app.models.user import User
 from app.routes.auth import router as auth_router
 from app.routes.interaction import router as interaction_router
 from app.routes.properties import router as properties_router
+from app.routes.ai import router as ai_router
 
 
 # Create database tables
@@ -13,12 +14,18 @@ Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI(title="AuraEstate API", version="1.0.0")
+app.include_router(ai_router, prefix="/api")
 
 
 # CORS — allow frontend to talk to backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
