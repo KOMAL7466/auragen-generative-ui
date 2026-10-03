@@ -25,7 +25,8 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "http://localhost:5174",
         "http://127.0.0.1:5174",
-        "https://auragen-generative-ui-tege.vercel.app/"
+        "https://auragen-generative-ui-navy.vercel.app",
+        "https://auragen-generative-ui-tege.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
